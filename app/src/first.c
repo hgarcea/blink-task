@@ -52,7 +52,7 @@ while(1){
            Board_Led_Clear(BOARD_LED_2);
       } 
 
-      
+}
      }  
    	
    	
