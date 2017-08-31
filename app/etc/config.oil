@@ -113,12 +113,7 @@ OSEK OSEK {
   }
 
   
-  ISR GPIO1_IRQHandler {
-      INTERRUPT = GPIO1;
-      CATEGORY = 1;
-      PRIORITY = 0;
-  }
-
+  
   EVENT = Event1;
   EVENT = Event2;
   };
