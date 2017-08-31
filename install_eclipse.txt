@@ -1,0 +1,43 @@
+*** CONFIGURACIÓN DE ECLIPSE PARA I3D FIRMWARE ***
+
+
+Paso 1:
+
+Ir a Windows -> Preferences -> Run/Debug -> String Subtitution
+y agregar las siguientes variables:
+
+arm_none_eabi_gdb : /usr/local/x-tools/gcc-arm-none-eabi-4_8-2014q2/bin
+i3d_firmware_path : <ubicación del proyecto>/i3d_firmware
+openocd_cfg_path  : <ubicación del proyecto>/i3d_firmware/tools/openocd
+openocd_path      : /usr/local/bin
+
+
+Paso 2:
+
+Ir a Project -> Properties -> C/C++ Build -> Environment y agregar en PATH la ubicación del 
+toolchain. En este caso el toolchain se ubica en /usr/local/x-tools/gcc-arm-none-eabi-4_8-2014q2/bin,
+por lo cual la variable PATH quedará finalmente de la siguienta manera:
+
+/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/usr/games:/usr/local/games::/usr/local/x-tools/gcc-arm-none-eabi-4_8-2014q2/bin
+
+
+Paso 3:
+
+Ir a Project -> Properties -> C/C++ Build. 
+En Builder Settings configurar el comando de make:
+
+Build command -> make -C ${i3d_firmware_path}
+Makefile generation -> no marcar nada
+Build directory -> ${workspace_loc:/i3d_firmware}/out/
+
+En Behaviour configurar:
+Clean -> clean generate
+
+
+
+* Referencia:
+
+Configuración de Eclipse para CIAA Firmware:
+http://www.proyecto-ciaa.com.ar/devwiki/doku.php?id=desarrollo:firmware:examples_ide
+
+

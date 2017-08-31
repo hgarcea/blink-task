@@ -1,0 +1,8 @@
+
+
+
+Alarma
+
+En oil crear alarma y asociarle accion .
+En la inicializacion de la tarea que usa la alarma hacer setalarm para arrancarla. 
+TickBase 1ms.

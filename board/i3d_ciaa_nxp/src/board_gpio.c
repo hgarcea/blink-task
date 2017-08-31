@@ -1,0 +1,67 @@
+#include "board.h"
+
+	/* Board Button */
+
+void Board_Gpio_Init(void)
+{
+
+  // Chip_GPIO_Init(LPC_GPIO_PORT);
+  // Chip_PININT_Init(LPC_GPIO_PIN_INT);
+   
+
+   	/* Board Button */
+   Chip_SCU_PinMux(SCU_BUTTON1_PORT_NUM, SCU_BUTTON1_PIN_NUM, MD_PUP|MD_EZI|MD_ZI, FUNC0); /* GPIO0[4], SW1 */
+   Chip_SCU_PinMux(SCU_BUTTON2_PORT_NUM, SCU_BUTTON2_PIN_NUM, MD_PUP|MD_EZI|MD_ZI, FUNC0); /* GPIO0[8], SW2 */
+   Chip_SCU_PinMux(SCU_BUTTON3_PORT_NUM, SCU_BUTTON3_PIN_NUM, MD_PUP|MD_EZI|MD_ZI, FUNC0); /* GPIO0[9], SW3 */
+   Chip_SCU_PinMux(SCU_BUTTON4_PORT_NUM, SCU_BUTTON4_PIN_NUM, MD_PUP|MD_EZI|MD_ZI, FUNC0); /* GPIO1[9], SW4 */
+
+   Chip_GPIO_SetDir(LPC_GPIO_PORT, 0,(1<<GPIO_BUTTON1_PIN_NUM)|(1<<GPIO_BUTTON2_PIN_NUM)|
+   					(1<<GPIO_BUTTON3_PIN_NUM),0);
+   Chip_GPIO_SetDir(LPC_GPIO_PORT, 1,(1<<GPIO_BUTTON4_PIN_NUM),0);
+   
+   /* LEDs */
+   Chip_SCU_PinMux(SCU_LED0_R_PORT_NUM, SCU_LED0_R_PIN_NUM, MD_PUP|MD_EZI,FUNC4); /* GPIO5[0], LED0R */
+   Chip_SCU_PinMux(SCU_LED0_G_PORT_NUM, SCU_LED0_G_PIN_NUM, MD_PUP|MD_EZI,FUNC4); /* GPIO5[1], LED0G */
+   Chip_SCU_PinMux(SCU_LED0_B_PORT_NUM, SCU_LED0_B_PIN_NUM, MD_PUP|MD_EZI,FUNC4); /* GPIO5[2], LED0B */
+   Chip_SCU_PinMux(SCU_LED1_PORT_NUM, SCU_LED1_PIN_NUM ,MD_PUP|MD_EZI,FUNC0); /* GPIO0[14], LED1 */
+   Chip_SCU_PinMux(SCU_LED2_PORT_NUM, SCU_LED2_PIN_NUM ,MD_PUP|MD_EZI,FUNC0); /* GPIO1[11], LED2 */
+   Chip_SCU_PinMux(SCU_LED3_PORT_NUM, SCU_LED3_PIN_NUM ,MD_PUP|MD_EZI,FUNC0); /* GPIO1[12], LED3 */
+
+   Chip_GPIO_SetDir(LPC_GPIO_PORT, GPIO_LED0_R_PORT_NUM,(1<< GPIO_LED0_R_PIN_NUM)|(1<<GPIO_LED0_G_PIN_NUM)|
+   					(1<<GPIO_LED0_B_PIN_NUM),1);
+   Chip_GPIO_SetDir(LPC_GPIO_PORT, 0,(1<<GPIO_LED1_PIN_NUM),1);
+   Chip_GPIO_SetDir(LPC_GPIO_PORT, 1,(1<<GPIO_LED2_PIN_NUM)|(1<<GPIO_LED3_PIN_NUM),1);
+
+   Chip_GPIO_ClearValue(LPC_GPIO_PORT, 5,(1<< GPIO_LED0_R_PIN_NUM)|(1<<GPIO_LED0_G_PIN_NUM)|
+   					(1<<GPIO_LED0_B_PIN_NUM));
+   Chip_GPIO_ClearValue(LPC_GPIO_PORT, 0,(1<<GPIO_LED1_PIN_NUM));
+   Chip_GPIO_ClearValue(LPC_GPIO_PORT, 1,(1<<GPIO_LED2_PIN_NUM)|(1<<GPIO_LED3_PIN_NUM));
+
+
+   /* Hardware interrupt*/ 
+
+   Chip_SCU_PinMux(SCU_INTEVENT_PORT_NUM, SCU_INTEVENT_PIN_NUM,MD_PUP | MD_EZI | MD_ZI,FUNC0); 
+
+   Chip_GPIO_SetDir(LPC_GPIO_PORT, GPIO_INTEVENT_PORT_NUM ,(1<< GPIO_INTEVENT_PIN_NUM),0);
+      
+      /*GPIO Interrupt Pin Select*/
+   Chip_SCU_GPIOIntPinSel(0,GPIO_INTEVENT_PORT_NUM,GPIO_INTEVENT_PIN_NUM);
+
+      /*Clear interrupt status in Pin interrupt block*/
+   Chip_PININT_ClearIntStatus(LPC_GPIO_PIN_INT, PININTCH0);
+
+      /*Configure the pins as edge sensitive in Pin interrupt block */
+   Chip_PININT_SetPinModeEdge(LPC_GPIO_PIN_INT,PININTCH0);
+
+      /*Enable low edge PININT interrupts for pins*/
+   Chip_PININT_EnableIntLow(LPC_GPIO_PIN_INT,PININTCH0);
+
+     /* Enable interrupt in the NVIC */
+   NVIC_ClearPendingIRQ(PIN_INT0_IRQn);
+   NVIC_EnableIRQ(PIN_INT0_IRQn); 
+
+
+
+}
+
+
